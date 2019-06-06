@@ -26,14 +26,14 @@ class RenatoButton extends StatelessWidget {
 }
 
 
-class ButtonAnimationController extends StatefulWidget {
+class RenatoButton extends StatefulWidget {
   Color color;
   Color progressColor;
   Widget textButton;
   Function state;
   double endHeghtAnim;
 
-  ButtonAnimationController({
+  RenatoButton({
     this.color,
     this.progressColor,
     this.textButton,
@@ -45,7 +45,7 @@ class ButtonAnimationController extends StatefulWidget {
   _RenatoAnimationState createState() => _RenatoAnimationState();
 }
 
-class _RenatoAnimationState extends State<ButtonAnimationController>
+class _RenatoAnimationState extends State<RenatoButton>
     with TickerProviderStateMixin {
   final StreamController stateAnimation = new StreamController();
 
