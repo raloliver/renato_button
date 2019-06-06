@@ -15,6 +15,7 @@ class RenatoButton extends StatelessWidget {
       this.textButton,
       this.state,
       this.endHightAnim});
+      
   int statusClick = 0;
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class RenatoButton extends StatelessWidget {
         progressColor: this.progressColor,
         textButton: this.textButton,
         state: this.state,
-        endHightAnim: this.endHeghtAnim);
+        endHightAnim: this.endHightAnim);
   }
 }
 
