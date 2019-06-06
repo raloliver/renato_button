@@ -1,58 +1,56 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
+
 class RenatoButton extends StatelessWidget {
-   Color color;
-  Color progressColor;
+  double width;
+  double height;
+  Color color;
+  MaterialColor progressColor;
   Widget textButton;
-  Function state;
-  double endHeghtAnim;
 
-  RenatoButton({this.color, this.progressColor, this.textButton, this.endHeghtAnim, this.state});
-
+  RenatoButton({this.width, this.height, this.color,this.progressColor,this.textButton});
+  int statusClick = 0;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return ButtonAnimationController(
-      color: this.color,
-      progressColor: this.progressColor,
-      textButton: this.textButton,
-      endHeghtAnim: this.endHeghtAnim,
-      state: this.state,
-    );
-    
+
+        width: this.width,
+        height: this.height,
+        color: this.color,
+        textButton: this.textButton,
+      );
+
   }
 }
 
 
-class RenatoButton extends StatefulWidget {
+class ButtonAnimationController extends StatefulWidget {
+  double width;
+  double height;
   Color color;
-  Color progressColor;
+  MaterialColor progressColor;
   Widget textButton;
-  Function state;
-  double endHeghtAnim;
 
-  RenatoButton({
-    this.color,
-    this.progressColor,
-    this.textButton,
-    this.endHeghtAnim,
-    this.state,
-  });
+  ButtonAnimationController(
+      {this.width,
+      this.height,
+      this.color,
+      this.progressColor,
+      this.textButton});
 
   @override
-  _RenatoAnimationState createState() => _RenatoAnimationState();
+  _ButtonAnimationControllerState createState() =>
+      _ButtonAnimationControllerState();
 }
 
-class _RenatoAnimationState extends State<RenatoButton>
+class _ButtonAnimationControllerState extends State<ButtonAnimationController>
     with TickerProviderStateMixin {
-  final StreamController stateAnimation = new StreamController();
-
   int statusClick = 0;
   AnimationController controller;
   Animation<double> buttonSqueezeAnimation;
   Animation<double> buttonZoomout;
+
   Tween _tween;
   @override
   void initState() {
@@ -60,76 +58,52 @@ class _RenatoAnimationState extends State<RenatoButton>
     super.initState();
     controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    _tween = Tween<double>(begin: 320.0, end: 70);
+    _tween = Tween<double>(
+        begin: widget.width == null ? 200 : widget.width, end: 70);
 
     buttonSqueezeAnimation = _tween.animate(new CurvedAnimation(
-        parent: controller, curve: new Interval(0.0, 0.250)))
-      ..addListener(() {});
-
-    buttonZoomout = new Tween(
-      begin: 70.0,
-      end: this.widget.endHeghtAnim
-    ).animate(new CurvedAnimation(
-      parent: controller,
-      curve: new Interval(
-        0.550,
-        0.900,
-        curve: Curves.bounceOut,
-      ),
-    ));
+        parent: controller, curve: new Interval(0.0, 0.350)))
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.dismissed) {
+          print("Terminou!");
+        }
+      });
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return InkWell(
-      onTap: () async {
+      onTap: () {
         controller.forward();
       },
-      child: statusClick == 0 ? stateInitial() : Container(),
+      child: stateInitial(),
     );
   }
 
-  Widget stateInitial() {
-    return StreamBuilder(
-        stream: stateAnimation.stream,
-        initialData: 0,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          statusClick = snapshot.data;
-          int valor = this.widget.state();
-          stateAnimation.add(valor);
-
-          return AnimatedBuilder(
-            animation: controller,
-            builder: (BuildContext context, Widget child) {
-              return Container(
-                  width: statusClick == 0 ? buttonSqueezeAnimation.value
-                       : buttonZoomout.value,
-                  height: statusClick == 0 ? 60 : buttonZoomout.value,
-                  alignment: FractionalOffset.center,
-                  decoration: BoxDecoration(
-                      color: this.widget.color == null ? Colors.cyan : this.widget.color,
-                      borderRadius: statusClick == 0 ? new BorderRadius.all(Radius.circular(30.0)) : BorderRadius.all(Radius.circular(00.0)),
-                  ),
-                  child: buttonSqueezeAnimation.value > 75.0
-                      ? new Center(
-                          child: widget.textButton == null
-                              ? Text("Animation")
-                              : widget.textButton,
-                        )
-                      : statusClick == 0 ? new CircularProgressIndicator(
-                              value: null,
-                              valueColor: new AlwaysStoppedAnimation<Color>(
-                                widget.progressColor == null
-                                    ? Colors.purple
-                                    : widget.progressColor,
-                              ),
-                            ) : null
-                      
-                      );
-            },
-          );
-        });
+  Container stateInitial() {
+    return Container(
+        width: buttonSqueezeAnimation.value,
+        height: widget.height == null ? 60.0 : widget.height,
+        decoration: BoxDecoration(
+          color: this.widget.color,
+          borderRadius: new BorderRadius.all(const Radius.circular(50.0)),
+        ),
+        child: buttonSqueezeAnimation.value > 75.0
+            ? new Center(
+                child: widget.textButton == null
+                    ? Text("Animation")
+                    : widget.textButton,
+              )
+            : new CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(
+                  widget.progressColor == null
+                      ? Colors.purple
+                      : widget.progressColor,
+                ),
+              ));
   }
-
 }
