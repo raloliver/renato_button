@@ -21,7 +21,7 @@
 RenatoButton(
    color: Colors.purpleAccent,
    progressColor: Colors.purple,
-   endHeghtAnim: MediaQuery.of(context).size.height,
+   endHightAnim: MediaQuery.of(context).size.height,
    textButton: Text('My Button'),
    //passando o estado do botão - primeiro estado é o um, ou seja o botão normal junto com o loading
    state: () {
