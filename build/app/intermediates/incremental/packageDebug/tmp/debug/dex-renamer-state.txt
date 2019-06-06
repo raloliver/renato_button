@@ -1,4 +1,0 @@
-#Thu Jun 06 03:36:47 BRT 2019
-base.0=/home/renato/code/renato_button/build/app/intermediates/transforms/dexMerger/debug/0
-path.0=classes.dex
-renamed.0=classes.dex

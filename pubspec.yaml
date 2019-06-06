@@ -1,7 +1,7 @@
 name: renato_button
-description: Animated button with 2 states: First load. Second full screen mode.
+description: A material flutter button that indicates,  First load. Second full screen mode.
 version: 1.0.0
-author: Renato Alcantara
+author: Renato Alcantara <renato.forjob@gmail.com>
 homepage: https://github.com/Git-RenatoAlcantara/renato_button
 doucumentation: https://github.com/Git-RenatoAlcantara/renato_button
 environment:
