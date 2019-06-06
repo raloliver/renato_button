@@ -1,53 +1,139 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:teste_1_0/renato_button.dart';
 
-void main() => runApp(MyApp());
+class RenatoButton extends StatelessWidget {
+  Color color;
+  Color progressColor;
+  Widget textButton;
+  Function state;
+  double endHeghtAnim;
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  RenatoButton(
+      {this.color,
+      this.progressColor,
+      this.textButton,
+      this.state,
+      this.endHeghtAnim});
+  int statusClick = 0;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyHomePage(),
-    );
+// TODO: implement build
+    return ButtonController(
+        color: this.color,
+        progressColor: this.progressColor,
+        textButton: this.textButton,
+        state: this.state,
+        endHeghtAnim: this.endHeghtAnim);
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class ButtonController extends StatefulWidget {
+  Color color;
+  Color progressColor;
+  Widget textButton;
+  Function state;
+  double endHeghtAnim;
 
-
-  
+  ButtonController({
+    this.color,
+    this.progressColor,
+    this.textButton,
+    this.endHeghtAnim,
+    this.state,
+  });
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _RenatoButtonControllerState createState() => _RenatoButtonControllerState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
- 
+class _RenatoButtonControllerState extends State<ButtonController>
+    with TickerProviderStateMixin {
+  final StreamController stateAnimation = new StreamController();
+
+  int statusClick = 0;
+  AnimationController controller;
+  Animation<double> buttonSqueezeAnimation;
+  Animation<double> buttonZoomout;
+  Tween _tween;
+  @override
+  void initState() {
+// TODO: implement initState
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    _tween = Tween<double>(begin: 320.0, end: 70);
+
+    buttonSqueezeAnimation = _tween.animate(new CurvedAnimation(
+        parent: controller, curve: new Interval(0.0, 0.250)))
+      ..addListener(() {});
+
+    buttonZoomout = new Tween(begin: 70.0, end: this.widget.endHeghtAnim)
+        .animate(new CurvedAnimation(
+      parent: controller,
+      curve: new Interval(
+        0.550,
+        0.900,
+        curve: Curves.bounceOut,
+      ),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-
-      ),
-      body: Center(
-        child: RenatoButton(
-         color: Colors.yellow,
-         progressColor: Colors.cyan,
-         textButton: Text("Loading"),
-         endHeghtAnim: MediaQuery.of(context).size.height,
-         state: (){
-           return 0;
-         },
-        ),
-      ),
+// TODO: implement build
+    return InkWell(
+      onTap: () async {
+        controller.forward();
+      },
+      child: statusClick == 0 ? stateInitial() : Container(),
     );
+  }
+
+  Widget stateInitial() {
+    return StreamBuilder(
+        stream: stateAnimation.stream,
+        initialData: 0,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          statusClick = snapshot.data;
+          int valor = this.widget.state();
+          stateAnimation.add(valor);
+
+          return AnimatedBuilder(
+            animation: controller,
+            builder: (BuildContext context, Widget child) {
+              return Container(
+                  width: statusClick == 0
+                      ? buttonSqueezeAnimation.value
+                      : buttonZoomout.value,
+                  height: statusClick == 0 ? 60 : buttonZoomout.value,
+                  alignment: FractionalOffset.center,
+                  decoration: BoxDecoration(
+                    color: this.widget.color == null
+                        ? Colors.cyan
+                        : this.widget.color,
+                    borderRadius: statusClick == 0
+                        ? new BorderRadius.all(Radius.circular(30.0))
+                        : BorderRadius.all(Radius.circular(00.0)),
+                  ),
+                  child: buttonSqueezeAnimation.value > 75.0
+                      ? new Center(
+                          child: widget.textButton == null
+                              ? Text("Animation")
+                              : widget.textButton,
+                        )
+                      : statusClick == 0
+                          ? new CircularProgressIndicator(
+                              value: null,
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                widget.progressColor == null
+                                    ? Colors.purple
+                                    : widget.progressColor,
+                              ),
+                            )
+                          : null);
+            },
+          );
+        });
   }
 }
