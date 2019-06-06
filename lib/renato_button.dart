@@ -5,8 +5,8 @@ class RenatoButton extends StatelessWidget {
   double width;
   double height;
   Color color;
-  MaterialColor progressColor;
-  Widget textButton;
+  Colors progressColor;
+  Text textButton;
 
   RenatoButton({this.width, this.height, this.color,this.progressColor,this.textButton});
   int statusClick = 0;
@@ -18,7 +18,6 @@ class RenatoButton extends StatelessWidget {
         width: this.width,
         height: this.height,
         color: this.color,
-        textButton: this.textButton,
       );
 
   }
@@ -29,8 +28,8 @@ class ButtonAnimationController extends StatefulWidget {
   double width;
   double height;
   Color color;
-  MaterialColor progressColor;
-  Widget textButton;
+  Color progressColor;
+  Text textButton;
 
   ButtonAnimationController(
       {this.width,
@@ -90,13 +89,13 @@ class _ButtonAnimationControllerState extends State<ButtonAnimationController>
         height: widget.height == null ? 60.0 : widget.height,
         decoration: BoxDecoration(
           color: this.widget.color,
-          borderRadius: new BorderRadius.all(const Radius.circular(50.0)),
+          borderRadius: new BorderRadius.all(const Radius.circular(30.0)),
         ),
         child: buttonSqueezeAnimation.value > 75.0
             ? new Center(
                 child: widget.textButton == null
                     ? Text("Animation")
-                    : widget.textButton,
+                    : widget.textButton.data,
               )
             : new CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
