@@ -7,13 +7,15 @@
  ```
    
 ## **Uso**</br>
- ##### import 'package:renato_button/renato_button.dart';  </br>
+
  
  Primeiro chamo classe RenatoButton <br>
  Passo a cor de fundo do botão</br>
  Tamanho total da tela que ao fim o botão ira ocupar
  Passo texto do botão
  Passo o estado 1 que será chamado apos o estado de loading.
+ 
+  ##### import [font Color='red'] 'package:renato_button/renato_button.dart'; [/font]  </br>
  ```
 RenatoButton(
    color: Colors.purpleAccent,
