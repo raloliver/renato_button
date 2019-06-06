@@ -1,108 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:teste_1_0/renato_button.dart';
 
+void main() => runApp(MyApp());
 
-class RenatoButton extends StatelessWidget {
-  double width;
-  double height;
-  Color color;
-  Colors progressColor;
-  Text textButton;
-
-  RenatoButton({this.width, this.height, this.color,this.progressColor,this.textButton});
-  int statusClick = 0;
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return ButtonAnimationController(
-
-        width: this.width,
-        height: this.height,
-        color: this.color,
-      );
-
-  }
-}
-
-
-class ButtonAnimationController extends StatefulWidget {
-  double width;
-  double height;
-  Color color;
-  Color progressColor;
-  Text textButton;
-
-  ButtonAnimationController(
-      {this.width,
-      this.height,
-      this.color,
-      this.progressColor,
-      this.textButton});
-
-  @override
-  _ButtonAnimationControllerState createState() =>
-      _ButtonAnimationControllerState();
-}
-
-class _ButtonAnimationControllerState extends State<ButtonAnimationController>
-    with TickerProviderStateMixin {
-  int statusClick = 0;
-  AnimationController controller;
-  Animation<double> buttonSqueezeAnimation;
-  Animation<double> buttonZoomout;
-
-  Tween _tween;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    _tween = Tween<double>(
-        begin: widget.width == null ? 200 : widget.width, end: 70);
-
-    buttonSqueezeAnimation = _tween.animate(new CurvedAnimation(
-        parent: controller, curve: new Interval(0.0, 0.350)))
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.dismissed) {
-          print("Terminou!");
-        }
-      });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return InkWell(
-      onTap: () {
-        controller.forward();
-      },
-      child: stateInitial(),
+    return MaterialApp(
+      home: MyHomePage(),
     );
   }
+}
 
-  Container stateInitial() {
-    return Container(
-        width: buttonSqueezeAnimation.value,
-        height: widget.height == null ? 60.0 : widget.height,
-        decoration: BoxDecoration(
-          color: this.widget.color,
-          borderRadius: new BorderRadius.all(const Radius.circular(30.0)),
+class MyHomePage extends StatefulWidget {
+
+
+  
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+ 
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+
+      ),
+      body: Center(
+        child: RenatoButton(
+         color: Colors.yellow,
+         progressColor: Colors.cyan,
+         textButton: Text("Loading"),
+         endHeghtAnim: MediaQuery.of(context).size.height,
+         state: (){
+           return 0;
+         },
         ),
-        child: buttonSqueezeAnimation.value > 75.0
-            ? new Center(
-                child: widget.textButton == null
-                    ? Text("Animation")
-                    : widget.textButton.data,
-              )
-            : new CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(
-                  widget.progressColor == null
-                      ? Colors.purple
-                      : widget.progressColor,
-                ),
-              ));
+      ),
+    );
   }
 }
