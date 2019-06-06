@@ -7,14 +7,14 @@ class RenatoButton extends StatelessWidget {
   Color progressColor;
   Widget textButton;
   Function state;
-  double endHeghtAnim;
+  double endHightAnim;
 
   RenatoButton(
       {this.color,
       this.progressColor,
       this.textButton,
       this.state,
-      this.endHeghtAnim});
+      this.endHightAnim});
   int statusClick = 0;
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class RenatoButton extends StatelessWidget {
         progressColor: this.progressColor,
         textButton: this.textButton,
         state: this.state,
-        endHeghtAnim: this.endHeghtAnim);
+        endHightAnim: this.endHeghtAnim);
   }
 }
 
@@ -33,13 +33,13 @@ class ButtonController extends StatefulWidget {
   Color progressColor;
   Widget textButton;
   Function state;
-  double endHeghtAnim;
+  double endHightAnim;
 
   ButtonController({
     this.color,
     this.progressColor,
     this.textButton,
-    this.endHeghtAnim,
+    this.endHightAnim,
     this.state,
   });
 
@@ -68,7 +68,7 @@ class _RenatoButtonControllerState extends State<ButtonController>
         parent: controller, curve: new Interval(0.0, 0.250)))
       ..addListener(() {});
 
-    buttonZoomout = new Tween(begin: 70.0, end: this.widget.endHeghtAnim)
+    buttonZoomout = new Tween(begin: 70.0, end: this.widget.endHightAnim)
         .animate(new CurvedAnimation(
       parent: controller,
       curve: new Interval(
