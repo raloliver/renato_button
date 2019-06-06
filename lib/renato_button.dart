@@ -3,37 +3,37 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class RenatoButton extends StatelessWidget {
-  Color color;
+   Color color;
   Color progressColor;
   Widget textButton;
   Function state;
   double endHeghtAnim;
 
-   RenatoButton({
-    this.color,
-    this.progressColor,
-    this.textButton,
-    this.endHeghtAnim,
-    this.state,
-  });
+  RenatoButton({this.color, this.progressColor, this.textButton, this.endHeghtAnim, this.state});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: RenatoButtonController(),
+    // TODO: implement build
+    return ButtonAnimationController(
+      color: this.color,
+      progressColor: this.progressColor,
+      textButton: this.textButton,
+      endHeghtAnim: this.endHeghtAnim,
+      state: this.state,
     );
+    
   }
 }
 
 
-class RenatoButtonController extends StatefulWidget {
+class ButtonAnimationController extends StatefulWidget {
   Color color;
   Color progressColor;
   Widget textButton;
   Function state;
   double endHeghtAnim;
 
-  RenatoButtonController({
+  ButtonAnimationController({
     this.color,
     this.progressColor,
     this.textButton,
@@ -45,7 +45,7 @@ class RenatoButtonController extends StatefulWidget {
   _RenatoAnimationState createState() => _RenatoAnimationState();
 }
 
-class _RenatoAnimationState extends State<RenatoButtonController>
+class _RenatoAnimationState extends State<ButtonAnimationController>
     with TickerProviderStateMixin {
   final StreamController stateAnimation = new StreamController();
 
