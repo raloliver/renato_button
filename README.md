@@ -15,7 +15,8 @@
  Passo texto do botão
  Passo o estado 1 que será chamado apos o estado de loading.
  
-  ##### import [font Color='red'] 'package:renato_button/renato_button.dart'; [/font]  </br>
+  ##### import  'package:renato_button/renato_button.dart';  </br>
+ ---
  ```
 RenatoButton(
    color: Colors.purpleAccent,
