@@ -1,13 +1,15 @@
 import 'dart:async';
 
-class RenatoButton extends StatefulWidget {
+import 'package:flutter/material.dart';
+
+class RenatoButton extends StatelessWidget {
   Color color;
   Color progressColor;
   Widget textButton;
   Function state;
   double endHeghtAnim;
 
-  RenatoButton({
+   RenatoButton({
     this.color,
     this.progressColor,
     this.textButton,
@@ -16,10 +18,34 @@ class RenatoButton extends StatefulWidget {
   });
 
   @override
-  _RenatoButtonControllerState createState() => _RenatoButtonControllerState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: RenatoButtonController(),
+    );
+  }
 }
 
-class _RenatoButtonControllerState extends State<RenatoButton>
+
+class RenatoButtonController extends StatefulWidget {
+  Color color;
+  Color progressColor;
+  Widget textButton;
+  Function state;
+  double endHeghtAnim;
+
+  RenatoButtonController({
+    this.color,
+    this.progressColor,
+    this.textButton,
+    this.endHeghtAnim,
+    this.state,
+  });
+
+  @override
+  _RenatoAnimationState createState() => _RenatoAnimationState();
+}
+
+class _RenatoAnimationState extends State<RenatoButtonController>
     with TickerProviderStateMixin {
   final StreamController stateAnimation = new StreamController();
 
