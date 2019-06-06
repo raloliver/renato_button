@@ -7,7 +7,7 @@
  ```
    
 ## **Uso**</br>
- ##### import </br>
+ ##### import 'package:renato_button/renato_button.dart';  </br>
  
  Primeiro chamo classe RenatoButton <br>
  Passo a cor de fundo do botão</br>
