@@ -1,57 +1,36 @@
+import 'dart:async';
+
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
-
-class RenatoButton extends StatelessWidget {
-  double width;
-  double height;
+class RenatoButton extends StatefulWidget {
   Color color;
   Color progressColor;
   Widget textButton;
+  Function state;
+  double endHeghtAnim;
 
-  RenatoButton({this.width, this.height, this.color,this.progressColor,this.textButton});
-  int statusClick = 0;
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return ButtonAnimationController(
-
-        width: this.width,
-        height: this.height,
-        color: this.color,
-        textButton: this.textButton,
-	      progressColor:  this.progressColor
-      );
-
-  }
-}
-
-
-class ButtonAnimationController extends StatefulWidget {
-  double width;
-  double height;
-  Color color;
-  Color progressColor;
-  Widget textButton;
-
-  ButtonAnimationController(
-      {this.width,
-      this.height,
-      this.color,
-      this.progressColor,
-      this.textButton});
+  RenatoButton({
+    this.color,
+    this.progressColor,
+    this.textButton,
+    this.endHeghtAnim,
+    this.state,
+  });
 
   @override
-  _ButtonAnimationControllerState createState() =>
-      _ButtonAnimationControllerState();
+  _RenatoButtonControllerState createState() => _RenatoButtonControllerState();
 }
 
-class _ButtonAnimationControllerState extends State<ButtonAnimationController>
+class _RenatoButtonControllerState extends State<RenatoButton>
     with TickerProviderStateMixin {
+  final StreamController stateAnimation = new StreamController();
+
   int statusClick = 0;
   AnimationController controller;
   Animation<double> buttonSqueezeAnimation;
   Animation<double> buttonZoomout;
-
   Tween _tween;
   @override
   void initState() {
@@ -59,54 +38,76 @@ class _ButtonAnimationControllerState extends State<ButtonAnimationController>
     super.initState();
     controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    _tween = Tween<double>(
-        begin: widget.width == null ? 200 : widget.width, end: 70);
+    _tween = Tween<double>(begin: 320.0, end: 70);
 
     buttonSqueezeAnimation = _tween.animate(new CurvedAnimation(
-        parent: controller, curve: new Interval(0.0, 0.350)))
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.dismissed) {
-          print("Terminou!");
-        }
-      });
+        parent: controller, curve: new Interval(0.0, 0.250)))
+      ..addListener(() {});
+
+    buttonZoomout = new Tween(
+      begin: 70.0,
+      end: this.widget.endHeghtAnim
+    ).animate(new CurvedAnimation(
+      parent: controller,
+      curve: new Interval(
+        0.550,
+        0.900,
+        curve: Curves.bounceOut,
+      ),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return InkWell(
-      onTap: () {
+      onTap: () async {
         controller.forward();
       },
-      child: stateInitial(),
+      child: statusClick == 0 ? stateInitial() : Container(),
     );
   }
 
-  Container stateInitial() {
-    return Container(
-        width: buttonSqueezeAnimation.value,
-        height: widget.height == null ? 60.0 : widget.height,
-        decoration: BoxDecoration(
-          color: this.widget.color,
-          borderRadius: new BorderRadius.all(const Radius.circular(50.0)),
-        ),
-        child: buttonSqueezeAnimation.value > 75.0
-            ? new Center(
-                child: widget.textButton == null
-                    ? Text("Animation")
-                    : widget.textButton,
-              )
-            : new CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(
-                  widget.progressColor == null
-                      ? Colors.purple
-                      : widget.progressColor,
-                ),
-              ));
+  Widget stateInitial() {
+    return StreamBuilder(
+        stream: stateAnimation.stream,
+        initialData: 0,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          statusClick = snapshot.data;
+          int valor = this.widget.state();
+          stateAnimation.add(valor);
+
+          return AnimatedBuilder(
+            animation: controller,
+            builder: (BuildContext context, Widget child) {
+              return Container(
+                  width: statusClick == 0 ? buttonSqueezeAnimation.value
+                       : buttonZoomout.value,
+                  height: statusClick == 0 ? 60 : buttonZoomout.value,
+                  alignment: FractionalOffset.center,
+                  decoration: BoxDecoration(
+                      color: this.widget.color == null ? Colors.cyan : this.widget.color,
+                      borderRadius: statusClick == 0 ? new BorderRadius.all(Radius.circular(30.0)) : BorderRadius.all(Radius.circular(00.0)),
+                  ),
+                  child: buttonSqueezeAnimation.value > 75.0
+                      ? new Center(
+                          child: widget.textButton == null
+                              ? Text("Animation")
+                              : widget.textButton,
+                        )
+                      : statusClick == 0 ? new CircularProgressIndicator(
+                              value: null,
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                widget.progressColor == null
+                                    ? Colors.purple
+                                    : widget.progressColor,
+                              ),
+                            ) : null
+                      
+                      );
+            },
+          );
+        });
   }
+
 }
-
-
